@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# Work around bug in texlive
+# defalt is openout_any = p (paranoid) which prevents makeindex from
+# using full pathnames
+# export openout_any=r
+
+if [ $# -lt 1 ]; then
+    printf "Usage: $0 main-dbk-file [extra search path]\n"
+    exit 1
+fi
+
+file=$1
+search_path="$2"
+# Use full pathnames in searchpath to work around relative path issue with DB5
+# searchpath doesn't work with subdirectories such as
+# href="Examples/cq_block_comment.dbk"
+# In these cases, the subdirectory must be a sibling of the file using xinclude.
+xmlto --searchpath "$search_path" --skip-validation html --stringparam profile.condition=nosolutions --stringparam section.autolabel=1 --stringparam section.autolabel.max.depth=2 --stringparam section.label.includes.component.label=1 --stringparam toc.max.depth=2 -o HTML $file
+

@@ -1,0 +1,69 @@
+#!/bin/sh
+
+if [ $# -lt 1 ]; then
+    printf "Usage: $0 program [program ...]\n"
+    exit 1
+fi
+
+for program in $*; do
+    output=$program.dbk
+    ext=${program#*.}
+    case $ext in
+	"f90"|"F90"|"f"|"F")
+	    language="Fortran"
+	    ;;
+	"c")
+	    language="C"
+	    ;;
+	"cc"|"C"|"c++"|"cxx")
+	    language="C++"
+	    ;;
+	"java")
+	    language="Java"
+	    ;;
+	"m")
+	    language="matlab"
+	    ;;
+	"mk")
+	    language="make"
+	    ;;
+	"screen")
+	    language="screen"
+	    ;;
+	"awk")
+	    language="awk"
+	    ;;
+	*)
+	    language="none"
+	    # Check for sh before others, since sh is a substring
+	    for shell in sh bash csh ksh; do
+		if fgrep '#!/' $program | fgrep -q $shell; then
+		    language=$shell
+		fi
+	    done
+    esac
+    
+    case $language in
+    "screen")
+	printf '<screen>\n' > $output
+	;;
+    "none")
+	printf '<programlisting>\n' > $output
+	;;
+    *)
+	printf '<programlisting language="'$language'">\n' > $output
+	;;
+    esac
+    
+    sed -e 's|&|\&amp;|g' -e 's|<|\&lt;|g' $program | detab >> $output
+
+    case $language in
+    "screen")
+	printf '</screen>\n' >> $output
+	;;
+    *)
+	printf '</programlisting>\n' >> $output
+	;;
+    esac
+done
+

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+for prog in *.c *.f *.f90 *.F *.F90 *.cc *.cxx *.c++ *.bc *.screen \
+    *.sh *.csh *.tcsh *.bash *.ksh *.zsh *.pbs *.bsub *.slurm *.sbatch \
+    *.condor *.awk *.asm *.java; do
+    if [ -e $prog ]; then
+	dbk-wrap-code $prog
+    fi
+done
+

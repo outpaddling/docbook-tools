@@ -1,0 +1,25 @@
+#!/bin/sh -e
+
+cc -o strip-dbk strip-dbk.c
+for file in computer-abstractions.dbk \
+	    instructions.dbk \
+	    arithmetic.dbk \
+	    processor.dbk \
+	    mem-hier.dbk \
+	    parallel.dbk \
+	    data-rep.dbk; do
+    echo $file
+    ./strip-dbk < $file > HW/$file
+done
+rm -f strip-dbk
+
+mkdir -p Key
+for file in HW/*.dbk; do
+    sed -e 's|info>|para>|g' $file > Key/`basename $file`
+done
+cd Key
+dbk-genmake ../practice-key.dbk *.dbk ../Programs/*.dbk
+make pdf
+docviewer ../practice-key.pdf
+cd ..
+rm -rf Key

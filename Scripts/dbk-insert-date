@@ -1,0 +1,33 @@
+#!/bin/sh -e
+
+##########################################################################
+#   Script description:
+#       
+#   Arguments:
+#       
+#   Returns:
+#       
+#   History:
+#   Date        Name        Modification
+#   2017-12-18  Jason Bacon Begin
+##########################################################################
+
+usage()
+{
+    printf "Usage: $0 input-file output-file\n"
+    exit 1
+}
+
+
+##########################################################################
+#   Main
+##########################################################################
+
+if [ $# != 2 ]; then
+    usage
+fi
+
+infile="$1"
+outfile="$2"
+sed -e "s|<subtitle>.*</subtitle>|<subtitle>`date '+%B %d, %Y'`</subtitle>|g" \
+    "$infile" > "$outfile"

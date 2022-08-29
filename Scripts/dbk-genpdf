@@ -1,0 +1,52 @@
+#!/bin/sh
+
+usage()
+{
+    printf "Usage: $0 dblatex|xsl main-dbk-file [extra search path]\n"
+    exit 1
+}
+
+if [ $# -lt 2 ]; then
+    usage
+fi
+
+# Work around bug in texlive
+# default is openout_any = p (paranoid) which prevents makeindex from
+# using full pathnames
+# export openout_any=r
+
+renderer=$1
+file="$2"
+stripped=${file%.dbk}
+
+case $renderer in
+dblatex)
+    if [ $# = 3 ]; then
+	search_path="$3"
+	extra_args="-x --path -x $search_path"
+    fi
+    
+    # -x passes the next flag on to xslt, must be used for each arg
+    # Add -D -d for debugging dblatex issues
+    set -x
+    dblatex -tpdf $extra_args -I `pwd` \
+	-P doc.collab.show=0 -P doc.section.depth=2 \
+	-P latex.output.revhistory=0 \
+	$stripped
+    ;;
+
+xsl)
+    STYLESHEETS_DIR=/usr/local/share/xsl/docbook
+    xsltproc -o rcug.fo $STYLESHEETS_DIR/fo/docbook.xsl rcug.dbk
+    fop -pdf rcug.pdf -fo rcug.fo
+    ;;
+
+pandoc)
+    printf "$0: pandoc: Not yet implemented.\n"
+    ;;
+
+*)
+    usage
+    ;;
+
+esac
