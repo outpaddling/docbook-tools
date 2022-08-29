@@ -1,0 +1,3 @@
+dbk-strip.o: dbk-strip.c
+	${CC} -c ${CFLAGS} dbk-strip.c
+
