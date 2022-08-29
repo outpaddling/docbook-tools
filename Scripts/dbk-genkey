@@ -37,17 +37,27 @@ if [ $# -lt 1 ]; then
     usage
 fi
 
+mkdir -p Key
 for file in "$@"; do
-    echo $file
-    dbk-strip < $file > HW/$file
+    dir=$(dirname $file)
+    base=$(basename $file)
+    hw_file=Key/$base
+    # Remove content from included chapters and replace HW/ with Key/
+    # so includes pull the HW file with answers visible.  Answers are
+    # embedded with <info> tags in the main file so they are not displayed
+    # in the text.
+    dbk-strip < $file | sed -e 's|HW/|Key/|g' > $hw_file
 done
 
-mkdir -p Key
-for file in HW/*.dbk; do
-    sed -e 's|info>|para>|g' $file > Key/`basename $file`
+# Generate HW files with answers visible by replacing <info> with <para>
+# Store in temporary Key directory
+for hw_file in $dir/HW/*.dbk; do
+    key_file=Key/$(basename $hw_file)
+    sed -e 's|info>|para>|g' $hw_file > $key_file
 done
+
 cd Key
-dbk-genmake ../practice-key.dbk *.dbk ../Programs/*.dbk
+dbk-genmake ../practice-key.dbk *.dbk
 make pdf
 docviewer ../practice-key.pdf
 cd ..
