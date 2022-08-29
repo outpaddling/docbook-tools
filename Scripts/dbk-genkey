@@ -1,17 +1,45 @@
 #!/bin/sh -e
 
-cc -o strip-dbk strip-dbk.c
-for file in computer-abstractions.dbk \
-	    instructions.dbk \
-	    arithmetic.dbk \
-	    processor.dbk \
-	    mem-hier.dbk \
-	    parallel.dbk \
-	    data-rep.dbk; do
+##########################################################################
+#   Synopsis:
+#       
+#   Description:
+#       
+#   Arguments:
+#       
+#   Returns:
+#
+#   Examples:
+#
+#   Files:
+#
+#   Environment:
+#
+#   See also:
+#       
+#   History:
+#   Date        Name        Modification
+#   2022-08-29  Jason Bacon Begin
+##########################################################################
+
+usage()
+{
+    printf "Usage: $0 file.dbk [file.dbk ...]\n"
+    exit 1
+}
+
+
+##########################################################################
+#   Main
+##########################################################################
+
+if [ $# != 1 ]; then
+    usage
+fi
+for file in "$@"; do
     echo $file
-    ./strip-dbk < $file > HW/$file
+    dbk-strip < $file > HW/$file
 done
-rm -f strip-dbk
 
 mkdir -p Key
 for file in HW/*.dbk; do
