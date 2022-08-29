@@ -33,9 +33,10 @@ usage()
 #   Main
 ##########################################################################
 
-if [ $# != 1 ]; then
+if [ $# -lt 1 ]; then
     usage
 fi
+
 for file in "$@"; do
     echo $file
     dbk-strip < $file > HW/$file
