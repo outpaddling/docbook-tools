@@ -63,6 +63,6 @@ cd Key
 cp ../practice-key.dbk .
 dbk-genmake practice-key.dbk *.dbk
 make pdf
-docviewer practice-key.pdf
-cd ..
-#rm -rf Key
+mv practice-key.pdf ..
+docviewer ../practice-key.pdf
+
