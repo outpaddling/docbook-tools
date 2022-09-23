@@ -37,6 +37,7 @@ if [ $# -lt 1 ]; then
     usage
 fi
 
+rm -rf Key
 mkdir -p Key
 for file in "$@"; do
     dir=$(dirname $file)
@@ -46,19 +47,22 @@ for file in "$@"; do
     # so includes pull the HW file with answers visible.  Answers are
     # embedded with <info> tags in the main file so they are not displayed
     # in the text.
-    dbk-strip < $file | sed -e 's|HW/|Key/|g' > $hw_file
-done
+    # echo $file
+    dbk-strip < $file | sed -e 's|HW/||g' > $hw_file
 
-# Generate HW files with answers visible by replacing <info> with <para>
-# Store in temporary Key directory
-for hw_file in $dir/HW/*.dbk; do
-    key_file=Key/$(basename $hw_file)
-    sed -e 's|info>|para>|g' $hw_file > $key_file
+    # Generate HW files with answers visible by replacing <info> with <para>
+    # Store in temporary Key directory
+    for hw_file in $dir/HW/*.dbk; do
+	# echo $hw_file
+	key_file=Key/$(basename $hw_file)
+	sed -e 's|info>|para>|g' $hw_file > $key_file
+    done
 done
 
 cd Key
-dbk-genmake ../practice-key.dbk *.dbk
+cp ../practice-key.dbk .
+dbk-genmake practice-key.dbk *.dbk
 make pdf
-docviewer ../practice-key.pdf
+docviewer practice-key.pdf
 cd ..
-rm -rf Key
+#rm -rf Key
