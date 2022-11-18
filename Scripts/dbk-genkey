@@ -36,6 +36,8 @@ usage()
 if [ $# -lt 1 ]; then
     usage
 fi
+key_base=$1
+shift
 
 rm -rf Key
 mkdir -p Key
@@ -60,8 +62,8 @@ for file in "$@"; do
 done
 
 cd Key
-cp ../practice-key.dbk .
-dbk-genmake practice-key.dbk *.dbk
+cp ../$key_base.dbk .
+dbk-genmake $key_base.dbk *.dbk
 make pdf
-mv practice-key.pdf ..
+mv $key_base.pdf ..
 
