@@ -110,7 +110,7 @@ Community support for pkgsrc is available through the
 
 ### Building docbook-tools locally
 
-Below are cave man install instructions for development purposes, not
+Below are caveman install instructions for development purposes, not
 recommended for regular use.
 
 1. Clone docbook-tools and dependencies into sibling directories
