@@ -40,7 +40,8 @@ int     main(int argc,char *argv[])
     title_count = 0;
     if ( (tag = read_tag(infile)) != NULL )
     {
-	if ( memcmp(tag, "<chapter", 8) == 0 )
+	if ( (memcmp(tag, "<chapter", 8) == 0) ||
+	     (memcmp(tag, "<section", 8) == 0) )
 	{
 	    puts(tag);
 	    while ( (tag = read_tag(infile)) != NULL )
