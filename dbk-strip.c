@@ -58,6 +58,8 @@ int     main(int argc,char *argv[])
 		{
 		    if ( --section_level == 1 )
 			printf("    %s\n", tag);
+		    else if ( section_level == 0 )
+			puts(tag);
 		}
 		else if ( memcmp(tag, "<title", 6) == 0 )
 		{
@@ -90,7 +92,7 @@ int     main(int argc,char *argv[])
 	}
 	else
 	{
-	    fprintf(stderr, "First tag should be <chapter>\n");
+	    fprintf(stderr, "First tag should be <chapter> or <section>\n");
 	    return EX_DATAERR;
 	}
     }
