@@ -14,28 +14,70 @@
 #include <sysexits.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
+#include <sys/stat.h>
 
 #define MAX_TAG_LEN 1024
 
 void    usage(char *argv[]);
+int     strip_file(const char *file);
 char    *read_tag(FILE *infile);
 
 int     main(int argc,char *argv[])
 
 {
-    FILE    *infile = stdin;
-    char    *tag;
-    int     section_level, title_count, ch;
-    
     switch(argc)
     {
-	case 1:
+	case 2:
+	    return strip_file(argv[1]);
 	    break;
 	
 	default:
 	    usage(argv);
     }
     
+    return EX_OK;
+}
+
+
+/***************************************************************************
+ *  Use auto-c2man to generate a man page from this comment
+ *
+ *  Library:
+ *      #include <>
+ *      -l
+ *
+ *  Description:
+ *  
+ *  Arguments:
+ *
+ *  Returns:
+ *
+ *  Examples:
+ *
+ *  Files:
+ *
+ *  Environment
+ *
+ *  See also:
+ *
+ *  History: 
+ *  Date        Name        Modification
+ *  2023-01-21  Jason Bacon Begin
+ ***************************************************************************/
+
+int     strip_file(const char *file)
+
+{
+    FILE    *infile;
+    char    *tag;
+    int     section_level, title_count, ch;
+    
+    if ( (infile = fopen(file, "r")) == NULL )
+    {
+	fprintf(stderr, "Cannot open %s: %s\n", file, strerror(errno));
+	exit(EX_UNAVAILABLE);
+    }
     section_level = 1;
     title_count = 0;
     if ( (tag = read_tag(infile)) != NULL )
@@ -79,10 +121,20 @@ int     main(int argc,char *argv[])
 			}
 		    }
 		}
-		else if ( (memcmp(tag, "<xi:include", 11) == 0) &&
-			  (strstr(tag, "HW/") != NULL) )
+		else if ( memcmp(tag, "<xi:include", 11) == 0 )
 		{
-		    printf("\n        %s\n", tag);
+		    if ( strstr(tag, "HW/") != NULL )
+		    {
+			printf("\n        %s\n", tag);
+		    }
+		    else
+		    {
+			struct stat st;
+			char *filename = strstr(tag, "href=") + 6;
+			*strchr(filename, '"') = '\0';
+			if ( stat(filename, &st) == 0 )
+			    strip_file(filename);
+		    }
 		}
 		else if ( memcmp(tag, "</chapter", 9) == 0 )
 		{
@@ -96,9 +148,9 @@ int     main(int argc,char *argv[])
 	    return EX_DATAERR;
 	}
     }
+    fclose(infile);
     return EX_OK;
 }
-
 
 char    *read_tag(FILE *infile)
 

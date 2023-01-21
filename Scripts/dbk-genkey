@@ -50,7 +50,7 @@ for file in "$@"; do
     # embedded with <info> tags in the main file so they are not displayed
     # in the text.
     # echo $file
-    dbk-strip < $file | sed -e 's|HW/||g' > $hw_file
+    dbk-strip $file | sed -e 's|HW/||g' > $hw_file
 
     # Generate HW files with answers visible by replacing <info> with <para>
     # Store in temporary Key directory
