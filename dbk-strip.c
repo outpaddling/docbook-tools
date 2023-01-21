@@ -129,6 +129,11 @@ int     strip_file(const char *file)
 		    }
 		    else
 		    {
+			/*
+			 *  FIXME: Only supports files in CWD
+			 *  Add a DBK_PATH feature
+			 */
+			
 			struct stat st;
 			char *filename = strstr(tag, "href=") + 6;
 			*strchr(filename, '"') = '\0';
