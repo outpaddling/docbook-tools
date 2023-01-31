@@ -149,8 +149,9 @@ int     strip_file(const char *file)
 	}
 	else
 	{
-	    fprintf(stderr, "%s: First tag should be <chapter> or <section>\n", file);
-	    return EX_DATAERR;
+	    // Skip included files that are not chapters or sections
+	    while ( (ch = getc(infile)) != EOF )
+		;
 	}
     }
     fclose(infile);
