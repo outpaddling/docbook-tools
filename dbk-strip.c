@@ -116,7 +116,7 @@ int     strip_file(const char *file)
 			    puts(tag);
 			else
 			{
-			    fprintf(stderr, "Expected </title>.\n");
+			    fprintf(stderr, "%s: Expected </title>.\n", file);
 			    return EX_DATAERR;
 			}
 		    }
@@ -149,7 +149,7 @@ int     strip_file(const char *file)
 	}
 	else
 	{
-	    fprintf(stderr, "First tag should be <chapter> or <section>\n");
+	    fprintf(stderr, "%s: First tag should be <chapter> or <section>\n", file);
 	    return EX_DATAERR;
 	}
     }
