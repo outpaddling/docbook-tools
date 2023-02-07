@@ -28,7 +28,6 @@ dblatex)
     
     # -x passes the next flag on to xslt, must be used for each arg
     # Add -D -d for debugging dblatex issues
-    set -x
     dblatex -tpdf $extra_args -I `pwd` \
 	-P doc.collab.show=0 -P doc.section.depth=2 \
 	-P latex.output.revhistory=0 \
