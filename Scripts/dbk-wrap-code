@@ -12,7 +12,7 @@ for program in $*; do
 	"f90"|"F90"|"f"|"F")
 	    language="Fortran"
 	    ;;
-	"c")
+	"c"|"h")
 	    language="C"
 	    ;;
 	"cc"|"C"|"c++"|"cxx")
@@ -42,6 +42,9 @@ for program in $*; do
 		fi
 	    done
     esac
+    if [ $program = Makefile ]; then
+	language="make"
+    fi
     
     case $language in
     "screen")
