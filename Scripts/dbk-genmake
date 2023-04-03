@@ -80,12 +80,20 @@ html: $html_target
 
 ${pdf_target}: \${SOURCES}
 	dbk-insert-date $main ${main%.dbk}
-	dbk-genpdf dblatex ${main%.dbk} $dirs
+	# Adding a search path can lead to importing the wrong file
+	# if the given path is not found.  dbklatex will then search
+	# the path for the base name
+	# dbk-genpdf dblatex ${main%.dbk} $dirs
+	dbk-genpdf dblatex ${main%.dbk}
 	rm -f ${main%.dbk}
 
 ${html_target}: \${SOURCES}
 	dbk-insert-date $main ${main%.dbk}
-	dbk-genhtml ${main%.dbk} $dirs
+	# Adding a search path can lead to importing the wrong file
+	# if the given path is not found.  dbklatex will then search
+	# the path for the base name
+	# dbk-genhtml ${main%.dbk} $dirs
+	dbk-genhtml ${main%.dbk}
 	rm -f ${main%.dbk}
 	./get-images
 
