@@ -108,17 +108,14 @@ int     strip_file(const char *file)
 		    if ( ++title_count <= 2 )
 		    {
 			printf("%*s%s", title_count * 4, " ", "<title>");
-			while ( (ch = getc(infile)) != '<' )
-			    putchar(ch);
-			ungetc(ch, infile);
-			tag = read_tag(infile);
-			if ( memcmp(tag, "</title", 7) == 0 )
-			    puts(tag);
-			else
+			do
 			{
-			    fprintf(stderr, "%s: Expected </title>.\n", file);
-			    return EX_DATAERR;
-			}
+			    while ( (ch = getc(infile)) != '<' )
+				putchar(ch);
+			    ungetc(ch, infile);
+			    tag = read_tag(infile);
+			    puts(tag);
+			}   while ( memcmp(tag, "</title", 7) != 0 );
 		    }
 		}
 		else if ( memcmp(tag, "<xi:include", 11) == 0 )
