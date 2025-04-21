@@ -55,7 +55,7 @@ for dir in $temp; do
     dirs="${dirs}:$dir"
 done
 
-html_target=HTML/index.html
+html_target=${main%.dbk}.html
 html_view_cmd=webbrowser
 pdf_target=${main%.dbk}.pdf
 pdf_view_cmd=docviewer
@@ -95,10 +95,9 @@ ${html_target}: \${SOURCES}
 	# dbk-genhtml ${main%.dbk} $dirs
 	dbk-genhtml ${main%.dbk}
 	rm -f ${main%.dbk}
-	./get-images
 
 clean:
-	rm -rf $pdf_target HTML
+	rm -f $pdf_target $html_target
 
 view: pdf
 	$pdf_view_cmd $pdf_target
