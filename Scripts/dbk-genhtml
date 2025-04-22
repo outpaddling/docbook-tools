@@ -16,5 +16,13 @@ search_path="$2"
 # searchpath doesn't work with subdirectories such as
 # href="Examples/cq_block_comment.dbk"
 # In these cases, the subdirectory must be a sibling of the file using xinclude.
-xmlto --skip-validation html-nochunks --stringparam profile.condition=nosolutions --stringparam section.autolabel=1 --stringparam section.autolabel.max.depth=2 --stringparam section.label.includes.component.label=1 --stringparam toc.max.depth=2 $file
+# Controlling TOCs: https://sagehill.net/docbookxsl/TOCcontrol.html
+xmlto --skip-validation \
+    --stringparam profile.condition=nosolutions \
+    --stringparam section.autolabel=1 \
+    --stringparam section.autolabel.max.depth=2 \
+    --stringparam section.label.includes.component.label=1 \
+    --stringparam toc.max.depth=3 \
+    html-nochunks \
+    $file
 
